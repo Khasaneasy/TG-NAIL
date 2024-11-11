@@ -3,8 +3,8 @@ import logging
 import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
-
 load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
@@ -31,7 +31,12 @@ async def cmd_price(message: types.Message):
     text = "Услуги и цены:\n\n"
     for service, price in prices.items():
         text += f'{service}: {price}\n'
-    await message.answer(text, parse_mode="HTML")
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Цены', callback_data='prices')],
+    ])
+
+    await message.answer(text, reply_markup=keyboard, parse_mode="HTML")
 
 
 @dp.message(Command('contact'))
@@ -46,7 +51,12 @@ async def cmd_contact(message: types.Message):
     text = "Контактная информация:\n\n"
     for info_type, info in contact_info.items():
         text += f"{info_type}: {info}\n"
-    await message.answer(text, parse_mode="HTML")
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Контакты', callback_data='contact_info')],
+    ])
+
+    await message.answer(text, reply_markup=keyboard, parse_mode="HTML")
 
 
 async def main():
