@@ -12,7 +12,7 @@ class ProblemDescriptions(Exception):
 
 class InvalidResponseCode(Exception):
     """Не верный код ответа."""
-    
+
     pass
 
 

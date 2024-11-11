@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+INSTAGRAM_URL = "https://www.instagram.com/bogatyreva_nailss"
+WHATSAPP_URL = "https://wa.me/79897440671" 
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=TELEGRAM_TOKEN)
@@ -43,20 +45,31 @@ async def cmd_price(message: types.Message):
 async def cmd_contact(message: types.Message):
     """ Хендлер на команду contact и вывод контактной информации."""
     contact_info = {
-        'Адрес': 'ул. Калмыкова, 20',
-        'Время работы': '10:00 - 18:00',
-        'Инстаграм': '@salon_beauty',
-        'WhatsApp': '+799999999'
+        'Адрес': 'https://2gis.ru/nalchik/geo/70030076168477659',
+        'Время работы': '10:00 - 18:00'
     }
     text = "Контактная информация:\n\n"
     for info_type, info in contact_info.items():
         text += f"{info_type}: {info}\n"
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Контакты', callback_data='contact_info')],
+        [InlineKeyboardButton(text="Instagram", url=INSTAGRAM_URL, callback_data='contact_info')],
+        [InlineKeyboardButton(text="WhatsApp", url=WHATSAPP_URL)]
     ])
 
     await message.answer(text, reply_markup=keyboard, parse_mode="HTML")
+
+
+@dp.callback_query(lambda call: call.data == 'prices')
+async def process_price_callback(callback_query: types.CallbackQuery):
+    """Обработчик для кнопки 'Цены'."""
+    await callback_query.answer("Цены на услуги", show_alert=True)
+
+
+@dp.callback_query(lambda call: call.data == 'contact_info')
+async def process_contact_callback(callback_query: types.CallbackQuery):
+    """Обработчик для кнопки 'Контакты'."""
+    await callback_query.answer("Контактная информация", show_alert=True)
 
 
 async def main():

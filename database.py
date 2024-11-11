@@ -17,6 +17,6 @@ class Nail(Base):
     service = Column(String)
 
 
-Base.metadata.creat_all(engine)
+Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
